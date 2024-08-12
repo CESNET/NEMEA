@@ -103,16 +103,19 @@ export chuser
    (
       cd pytrap
       su $chuser -p -c "make rpm"
-      $pkginst install -y -q $(find \( -name '*.rpm' -o -name '*64.rpm' \))
+      $pkginst install -y -q $(find \( -name '*noarch.rpm' -o -name '*64.rpm' \))
       su $chuser -p -c "python3.6 setup.py bdist_wheel"
       su $chuser -p -c "python3.8 setup.py bdist_wheel"
       su $chuser -p -c "python3.9 setup.py bdist_wheel"
    )
    (
       cd pycommon
-      su $chuser -p -c "make && make rpm"
+      su $chuser -p -c "make rpm"
+      su $chuser -p -c "python3.6 setup.py bdist_wheel"
       $pkginst install -y -q $(find \( -name '*noarch.rpm' -o -name '*64.rpm' \))
    )
+   su $chuser -p -c "make rpm"
+   $pkginst install -y -q $(find -name 'nemea-framework-*noarch.rpm')
 )
 (
    cd modules
@@ -125,6 +128,11 @@ export chuser
    $pkginst install -y -q $(find \( -name '*noarch.rpm' -o -name '*64.rpm' \))
 )
 (
+   cd modules-ng
+   su $chuser -p -c "cmake . && make rpm"
+   $pkginst install -y -q $(find \( -name '*noarch.rpm' -o -name '*64.rpm' \))
+)
+(
    cd nemea-supervisor
    su $chuser -p -c "$topdir/generate-rpm.sh"
    $pkginst install -y -q $(find \( -name '*noarch.rpm' -o -name '*64.rpm' \))
@@ -134,6 +142,10 @@ su $chuser -p -c "$topdir/bootstrap.sh >/dev/null 2>/dev/null&& $topdir/configur
 mkdir -p "`pwd`/RPMBUILD"
 rpmbuild  -ba nemea.spec --define "_topdir `pwd`/RPMBUILD"
 mkdir -p "`pwd`/rpms"
-find -name *.rpm -not -path "./rpms/*" -exec mv {} rpms/ \;
+find -name '*.rpm' -not -path "./rpms/*" -exec mv {} rpms/ \;
 chown -R $chuser rpms/
+
+mkdir -p "`pwd`/wheels"
+find -name '*.whl' -not -path "./wheels/*" -exec mv {} wheels/ \;
+
 

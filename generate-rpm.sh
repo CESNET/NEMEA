@@ -35,5 +35,6 @@
 # if advised of the possibility of such damage.
 
 pwd
-./bootstrap.sh >/dev/null 2>/dev/null&& ./configure -q && make -j4 && make rpm
+git submodule init; git submodule update;
+./bootstrap.sh >/dev/null 2>/dev/null&& ./configure -q && make rpm
 
