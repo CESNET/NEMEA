@@ -36,6 +36,14 @@
 
 #set -x
 
+if [ "$#" -eq 1 ]; then
+   chuser="$1"
+else
+   echo "For non-interactive mode run with username as argument, e.g.:"
+   echo "  $0 builder"
+   echo "where builder is a non-root user for building RPMs."
+fi
+
 if [ -x "`which dnf`" ]; then
    export pkginst=dnf
 elif [ -x "`which yum`" ]; then
@@ -45,22 +53,27 @@ else
    exit 1
 fi
 
-echo "Warning: You must have 'rpmbuild' in order to generate RPM package."
-echo "If you want to abort this script, press CTRL+C (i.e. send SIGINT signal)"
-sleep 5
+if [ -z "$chuser" ]; then
+   echo "Warning: You must have 'rpmbuild' in order to generate RPM package."
+   echo "If you want to abort this script, press CTRL+C (i.e. send SIGINT signal)"
+   sleep 5
 
-if [ "x`whoami`" != xroot ]; then
-   echo "Run this script as root, since it must install RPM packages continuously"
-   exit 1
+   if [ "x`whoami`" != xroot ]; then
+      echo "Run this script as root, since it must install RPM packages continuously"
+      exit 1
+   fi
+
+   read -p "Enter the name of user who will compile packages: " chuser
+
+   read -p "Are You sure You want to continue? [yn]" -n1 ans
+
+   if [ "x$ans" != xy ]; then
+      exit 0
+   fi
 fi
 
-read -p "Enter the name of user who will compile packages: " chuser
-
-read -p "Are You sure You want to continue? [yn]" -n1 ans
-
-if [ "x$ans" != xy ]; then
-   exit 0
-fi
+./bootstrap.sh
+./configure -q
 
 echo "Remove previously installed packages"
 $pkginst remove -q -y libtrap\* unirec\* nemea\*
@@ -88,9 +101,12 @@ export chuser
    )
    su $chuser -p -c "./bootstrap.sh >/dev/null 2>/dev/null&& ./configure -q"
    (
-      cd python
-      su $chuser -p -c "make && make rpm"
-      $pkginst install -y -q $(find \( -name '*noarch.rpm' -o -name '*64.rpm' \))
+      cd pytrap
+      su $chuser -p -c "make rpm"
+      $pkginst install -y -q $(find \( -name '*.rpm' -o -name '*64.rpm' \))
+      su $chuser -p -c "python3.6 setup.py bdist_wheel"
+      su $chuser -p -c "python3.8 setup.py bdist_wheel"
+      su $chuser -p -c "python3.9 setup.py bdist_wheel"
    )
    (
       cd pycommon

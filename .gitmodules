@@ -11,3 +11,6 @@
 [submodule "detectors"]
 	path = detectors
 	url = https://github.com/CESNET/Nemea-Detectors
+[submodule "modules-ng"]
+	path = modules-ng
+	url = https://github.com/CESNET/nemea-modules-ng
