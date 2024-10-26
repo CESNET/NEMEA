@@ -1,0 +1,17 @@
+---
+- name: IPFIXcol2 is installed
+  ansible.builtin.dnf:
+    name:
+      - ipfixcol2
+      - ipfixcol2-unirec-output
+    state: latest
+
+- name: Copy IPFIXcol2 config
+  copy:
+    src: ipfixcol2.service
+    dest: /usr/lib/systemd/system/
+
+- name: Reload systemd configs
+  ansible.builtin.systemd:
+    daemon_reload: true
+

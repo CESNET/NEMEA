@@ -1,0 +1,21 @@
+---
+- name: Sudo is installed
+  ansible.builtin.dnf:
+    name: sudo
+    state: latest
+
+- name: Htop is installed
+  ansible.builtin.dnf:
+    name: htop
+    state: latest
+
+- name: Vim is installed
+  ansible.builtin.dnf:
+    name: vim
+    state: latest
+
+- name: tcpdump is installed
+  ansible.builtin.dnf:
+    name: tcpdump
+    state: latest
+

@@ -1,0 +1,59 @@
+<ipfixcol2>
+  <!-- Input plugins -->
+  <inputPlugins>
+    <input>
+      <name>TCP collector</name>
+      <plugin>tcp</plugin>
+      <params>
+        <!-- List on port 4739 -->
+        <localPort>4739</localPort>
+        <!-- Bind to all local adresses -->
+        <localIPAddress></localIPAddress>
+      </params>
+    </input>
+    <input>
+      <name>UDP collector</name>
+      <plugin>udp</plugin>
+      <params>
+        <!-- List on port 4739 -->
+        <localPort>4739</localPort>
+        <!-- Bind to all local adresses -->
+        <localIPAddress></localIPAddress>
+      </params>
+    </input>
+  </inputPlugins>
+
+  <outputPlugins>
+       <!-- resend IPFIX -->
+
+       <output>
+         <name>Dummy output</name>
+         <plugin>dummy</plugin>
+         <params>
+             <delay>0</delay>
+             <stats>true</stats>
+         </params>
+     </output>
+  <output>
+      <name>UR_ETA</name>
+      <plugin>unirec</plugin>
+      <params>
+          <uniRecFormat>TIME_FIRST,TIME_LAST,SRC_IP,DST_IP,PROTOCOL,SRC_PORT,DST_PORT,?TLS_SNI,?TLS_JA3_FINGERPRINT,?TCP_FLAGS,?TCP_FLAGS_REV,PACKETS,PACKETS_REV,BYTES,BYTES_REV,PPI_PKT_LENGTHS,PPI_PKT_TIMES,PPI_PKT_FLAGS,PPI_PKT_DIRECTIONS,?S_PHISTS_SIZES,?D_PHISTS_SIZES,?S_PHISTS_IPT,?D_PHISTS_IPT,?SBI_BRST_BYTES,?SBI_BRST_PACKETS,?SBI_BRST_TIME_START,?SBI_BRST_TIME_STOP,?DBI_BRST_PACKETS,?DBI_BRST_BYTES,?DBI_BRST_TIME_START,?DBI_BRST_TIME_STOP,?IDP_CONTENT,?IDP_CONTENT_REV,LINK_BIT_FIELD,?OVPN_CONF_LEVEL,?WG_CONF_LEVEL,?SSA_CONF_LEVEL,?FLOW_END_REASON</uniRecFormat>
+          <splitBiflow>false</splitBiflow>
+          <trapIfcCommon>
+              <timeout>NO_WAIT</timeout>
+              <buffer>true</buffer>
+              <autoflush>1000000</autoflush>
+          </trapIfcCommon>
+          <trapIfcSpec>
+              <unix>
+                  <name>eta_flowdata</name>
+                  <maxClients>64</maxClients>
+              </unix>
+          </trapIfcSpec>
+      </params>
+  </output>
+
+  </outputPlugins>
+</ipfixcol2>
+

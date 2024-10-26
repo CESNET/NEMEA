@@ -1,0 +1,15 @@
+[Unit]
+Description=Start IPFIXcol2 collector
+
+# Ensure that hanic service is loaded:
+After=network-online.target
+
+[Service]
+Type=simple
+Restart=on-failure
+
+ExecStart=/usr/bin/ipfixcol2 -c /etc/ipfixcol2/ipfixcol2-startup.xml -r 16384
+
+[Install]
+WantedBy=multi-user.target
+

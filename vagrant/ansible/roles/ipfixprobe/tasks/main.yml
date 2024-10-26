@@ -1,0 +1,6 @@
+---
+- name: ipfixprobe is installed
+  ansible.builtin.dnf:
+    name: ipfixprobe
+    state: latest
+ 

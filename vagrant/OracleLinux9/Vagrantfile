@@ -1,0 +1,40 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/oracle9"
+  config.vm.box_check_update = false
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+    vb.memory = "1024"
+    vb.customize ["modifyvm", :id, "--cpus", 3]
+    vb.customize ["modifyvm", :id, "--name", "nemea-vm"]
+  end
+
+  config.vm.network "forwarded_port", guest: 4739, host: 4739, protocol: "udp"
+  config.vm.network "forwarded_port", guest: 4739, host: 4739, protocol: "tcp"
+
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+      hostnamectl set-hostname nemea-vm
+  SHELL
+
+  config.vm.provision :ansible do |ansible|
+      ansible.playbook = "../ansible/nemea-vm.yml"
+      ansible.become = "sudo"
+      ansible.compatibility_mode = "1.8"
+      # ansible.inventory_path = "../ansible/inventory/hosts"
+      # ansible.tags = "install"
+      ansible.groups = {
+        "nemea-vm" => ["default"]
+      }
+
+      ansible.raw_arguments = [
+        "-v", "--become-method=sudo", "--become"
+      ]
+    end
+
+end

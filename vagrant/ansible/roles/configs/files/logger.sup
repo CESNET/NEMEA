@@ -1,0 +1,35 @@
+<module>
+<name>storage</name>
+<enabled>true</enabled>
+<path>/usr/bin/nemea/traffic_repeater</path>
+<params/>
+<trapinterfaces>
+<interface>
+  <type>UNIXSOCKET</type>
+  <direction>IN</direction>
+  <params>eta_flowdata</params>
+</interface>
+<interface>
+  <type>FILE</type>
+  <direction>OUT</direction>
+  <params>/data/flows/%Y/%m/data.trapcap:a:time=5</params>
+</interface>
+</trapinterfaces>
+</module>
+
+<!--
+<module>
+<name>logger</name>
+<enabled>true</enabled>
+<path>/usr/bin/nemea/logger</path>
+<params>-t -T -a /data/flows.log</params>
+<trapinterfaces>
+<interface>
+  <type>UNIXSOCKET</type>
+  <direction>IN</direction>
+  <params>eta_flowdata</params>
+</interface>
+</trapinterfaces>
+</module>
+-->
+

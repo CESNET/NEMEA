@@ -1,0 +1,51 @@
+---
+- name: Copy ipfixprobe config
+  copy:
+    src: eth0.conf
+    dest: /etc/ipfixprobe/
+
+- name: Copy IPFIXcol2 config
+  copy:
+    src: ipfixcol2-startup.xml
+    dest: /etc/ipfixcol2/
+
+- name: Create datadir
+  ansible.builtin.file:
+    path: /data/
+    state: directory
+    owner: nemead
+    group: nemead
+    
+- name: Copy NEMEA config
+  copy:
+    src: logger.sup
+    dest: /etc/nemea/data-sources/
+    owner: nemead
+    group: nemead
+
+- name: Restart IPFIXcol2
+  ansible.builtin.systemd:
+    name: ipfixcol2
+    state: restarted
+    enabled: true
+  
+- name: Restart NEMEA
+  ansible.builtin.systemd:
+    name: nemea-supervisor
+    state: restarted
+    enabled: true
+
+- name: Reload NEMEA config
+  command: supcli -r
+  
+- name: Restart ipfixprobe
+  ansible.builtin.systemd:
+    name: ipfixprobe@eth0
+    state: restarted
+    enabled: true
+  
+- name: Copy motd
+  copy:
+    src: motd
+    dest: /etc/motd
+

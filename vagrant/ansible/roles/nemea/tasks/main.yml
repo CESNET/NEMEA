@@ -1,0 +1,7 @@
+---
+- name: NEMEA is installed
+  ansible.builtin.dnf:
+    name:
+      - nemea
+    state: latest
+

@@ -12,15 +12,16 @@ You can download these software here:
 
 - Virtualbox: https://www.virtualbox.org/wiki/Downloads
 - Vagrant: http://www.vagrantup.com/downloads.html
+- Ansible
+    - galaxy collection community: `ansible-galaxy collection install community.general`
+    - galaxy collection posix: `ansible-galaxy collection install ansible.posix`
 
 NEMEA Installation Steps
 ========================
 
 This directory contains prepared configuration (Vagrantfile) for the following systems:
 
-* [CentOS 7](./CentOS7/)
-* [Fedora 22 Cloud](./Fedora22/)
-* [Scientific Linux](./ScientificLinux6/)
+* [OracleLinux9](./OracleLinux9/)
 
 After choosing the system change working directory into the chosen one and follow the
 system dependent instructions in the README.md file.

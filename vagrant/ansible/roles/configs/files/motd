@@ -1,0 +1,6 @@
+Flow data are being stored into /data/flow/...
+To convert the file to CSV text, use /usr/bin/nemea/logger
+E.g.:
+        /usr/bin/nemea/logger -t -i 'f:/data/flows/2024/10/data.trapcap.*'
+
+

@@ -1,0 +1,9 @@
+---
+- hosts: nemea-vm
+  roles:
+    - common_tools
+    - ipfixprobe
+    - ipfixcol2
+    - nemea
+    - configs
+

@@ -1,0 +1,17 @@
+---
+- name: Enable EPEL repository
+  ansible.builtin.dnf:
+    name: epel-release
+    state: latest
+
+- name: Enable @CESNET/NEMEA repository
+  community.general.copr:
+    name: '@CESNET/NEMEA'
+    chroot: epel-9-x86_64
+    state: enabled
+
+- name: Enable @CESNET/IPFIXcol2 repository
+  community.general.copr:
+    name: '@CESNET/IPFIXcol'
+    chroot: epel-9-x86_64
+    state: enabled
